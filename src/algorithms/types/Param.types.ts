@@ -1,4 +1,4 @@
-import { TimeSeries } from './TimeSeries'
+import { TimeSeries } from './TimeSeries.types'
 
 export interface PopulationData {
   populationServed: number
@@ -11,7 +11,7 @@ export interface PopulationData {
 }
 
 export interface EpidemiologicalData {
-  r0: number
+  r0: number // Average number of people who will catch a disease from one contagious person. Usually specified as a decimal, e. g. 2.7
   incubationTime: number
   infectiousPeriod: number
   lengthHospitalStay: number
@@ -23,6 +23,7 @@ export interface EpidemiologicalData {
 
 export interface ContainmentData {
   reduction: TimeSeries
+  numberPoints: number
 }
 
 export interface DateRange {
@@ -39,6 +40,7 @@ export interface AllParams {
   population: PopulationData
   epidemiological: EpidemiologicalData
   simulation: SimulationData
+  containment: ContainmentData
 }
 
 export type AllParamsFlat = PopulationData & EpidemiologicalData & SimulationData

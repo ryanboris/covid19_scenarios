@@ -1,18 +1,12 @@
 import * as d3 from 'd3'
 
-import { DateRange } from './Param.types'
-import { interpolateTimeSeries } from './run'
-
-interface TimePoint {
-  t: Date
-  y: number
-}
-
-export type TimeSeries = TimePoint[]
+import { DateRange } from '../types/Param.types'
+import { interpolateTimeSeries } from '../run'
+import { TimeSeries } from '../types/TimeSeries.types'
 
 export function uniformDatesBetween(min: number, max: number, n: number): Date[] {
   const d = (max - min) / (n - 1)
-  const dates = d3.range(min, max + d, d)
+  const dates = d3.range(min, max + d, d).filter((_, i) => i < n)
   return dates.map(d => new Date(d))
 }
 
@@ -30,14 +24,10 @@ export function makeTimeSeries(simulationTimeRange: DateRange, values: number[])
   return tSeries
 }
 
-
-export function updateTimeSeries(simulationTimeRange: DateRange, oldTimeSeries: TimeSeries): TimeSeries {
+export function updateTimeSeries(simulationTimeRange: DateRange, oldTimeSeries: TimeSeries, n: number): TimeSeries {
   const { tMin, tMax } = simulationTimeRange
-  const n = oldTimeSeries.length
   const interpolator = interpolateTimeSeries(oldTimeSeries)
 
   const dates = uniformDatesBetween(tMin.getTime(), tMax.getTime(), n)
-  const newTimeSeries: TimeSeries = dates.map(d => ({t: d, y: interpolator(d)}))
-
-  return newTimeSeries
+  return dates.map(d => ({ t: d, y: interpolator(d) }))
 }

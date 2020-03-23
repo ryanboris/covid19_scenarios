@@ -26,11 +26,15 @@ export default function FormHelpButton({ identifier, label, help }: FormHelpButt
         className="help-button"
         type="button"
         onClick={e => {
+          if (!popoverOpen) {
+            e.currentTarget.focus()
+          }
           e.preventDefault()
           e.stopPropagation()
         }}
         onFocus={() => setPopoverOpen(true)}
         onBlur={() => setPopoverOpen(false)}
+        aria-label="help"
       >
         <FaQuestion className="help-button-icon" />
       </Button>
